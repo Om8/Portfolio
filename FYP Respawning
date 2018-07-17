@@ -1,0 +1,39 @@
+void ACS_Character_Base_CPP::Respawn() {
+	isDead = false;
+	health = maxHealth;
+	if (HasAuthority()) {
+		UE_LOG(LogTemp, Warning, TEXT("Called spawn player"));
+
+		TArray<ACS_SpawnLocation_CPP*> spawnsThatCanBeUsed;
+		for (TActorIterator<ACS_SpawnLocation_CPP> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+			ACS_SpawnLocation_CPP *spawnLocation = *ActorItr;
+			FName spawnTeam = spawnLocation->teamData.RowContents;
+			ETeam teamEnum = Cast<ACS_PlayerState_CPP>(PlayerState)->teamInformation.team;
+			const UEnum* enumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ETeam"), true);
+			if (!enumPtr) {
+				UE_LOG(LogTemp, Warning, TEXT("Not valid"));
+			}
+			else {
+				FName currentPlayerTeam = FName(enumPtr->GetNameByValue((int64)teamEnum));
+
+				FString* newCurrentTeam = new FString;
+				currentPlayerTeam.ToString().Split("::", nullptr, newCurrentTeam, ESearchCase::IgnoreCase, ESearchDir::FromStart);
+				//UE_LOG(LogTemp, Display, TEXT("%s"), *currentPlayerTeam.ToString());
+				//UE_LOG(LogTemp, Display, TEXT("%s"), *spawnTeam.ToString());
+
+				if (newCurrentTeam->Equals(spawnTeam.ToString(), ESearchCase::IgnoreCase)) {
+					//	UE_LOG(LogTemp, Warning, TEXT("Spawn"));
+					spawnsThatCanBeUsed.Add(spawnLocation);
+				}
+			}
+		}
+
+		if (spawnsThatCanBeUsed.Num() > 0) {
+			ACS_SpawnLocation_CPP *chosenSpawn = spawnsThatCanBeUsed[FMath::RandRange(0, spawnsThatCanBeUsed.Num() - 1)];
+			SetActorLocation(chosenSpawn->GetActorLocation() + FVector(0, 0, 100), false, nullptr, ETeleportType::TeleportPhysics);
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("Cannot spawn player"));
+		}
+	}
+}
