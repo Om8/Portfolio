@@ -3,6 +3,7 @@ A few examples of code that I have written over the last 3 years
 
 
 Game of life was created in my first year of my degree, this was one of the tasks that introduced me to C++.
+
 The prime number assignment asked for us to create a program which got all of the prime numbers up to 10,000 as fast as possible. Thiw as done in the first year and taught us a bit about optimising code. 
 
 
