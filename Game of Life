@@ -6,7 +6,7 @@ void GameOfLife() {
 	int Grid1[80][25], Grid2[80][25];//Two 2d arrays, this is to get values from one and set to the other
 	for (int x = 0; x < 80; x++) {
 		for (int y = 0; y < 25; y++) {
-			Grid1[x][y] = (int)((rand() / (float)RAND_MAX)*2);//Ayyy Random
+			Grid1[x][y] = (int)((rand() / (float)RAND_MAX)*2);
 		}
 	}
 
@@ -19,6 +19,7 @@ void GameOfLife() {
 		}
 	}
 	unsigned int t1 = 0, t2 = 0;
+	//start timer
 	t1 = GetTickCount();
 	do {
 
@@ -28,11 +29,11 @@ void GameOfLife() {
 			GameOfLife();
 			return;
 		}
+		//set timer to current time
 		t2 = GetTickCount();
-	//	sleep_for(milliseconds(500));
 		if (t2 - t1 > 500) {//.5 of a second
 			t1 = t2;
-			clrscr();
+			clrscr(); //Clears screen
 			for (int x = 0; x < 80; x++) {
 				for (int y = 0; y < 25; y++) {
 					livingNext = 0;
@@ -66,6 +67,7 @@ void GameOfLife() {
 					}
 				}
 			}
+			//Fills screen with new data
 			for (int x = 0; x < 80; x++) {
 				for (int y = 0; y < 25; y++) {
 					Grid1[x][y] = Grid2[x][y];
