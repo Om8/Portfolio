@@ -1,13 +1,17 @@
 void ACS_Character_Base_CPP::Respawn() {
 	isDead = false;
 	health = maxHealth;
+	//If is the server do this
 	if (HasAuthority()) {
+		//Print to log
 		UE_LOG(LogTemp, Warning, TEXT("Called spawn player"));
 
+		//Gets all spawn locations in world and checks if any of them can be used to spawn
 		TArray<ACS_SpawnLocation_CPP*> spawnsThatCanBeUsed;
 		for (TActorIterator<ACS_SpawnLocation_CPP> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
 			ACS_SpawnLocation_CPP *spawnLocation = *ActorItr;
 			FName spawnTeam = spawnLocation->teamData.RowContents;
+			//Found a better way of doing this, but this works for now.
 			ETeam teamEnum = Cast<ACS_PlayerState_CPP>(PlayerState)->teamInformation.team;
 			const UEnum* enumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ETeam"), true);
 			if (!enumPtr) {
